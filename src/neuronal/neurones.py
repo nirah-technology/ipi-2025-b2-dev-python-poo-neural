@@ -13,32 +13,32 @@ class Neurone(ABC):
         print(self.__bias)
 
     @abstractmethod
-    def activate(self, value: float) -> float:
+    def _activate(self, value: float) -> float:
         raise NotImplementedError()
     
     def forward(self, inputs: list[float]) -> float:
         z = sum(
             weight * input for weight, input in zip(self.__weights, inputs)
             ) + self.__bias
-        return self.activate(z)
+        return self._activate(z)
 
 class SigmoidNeurone(Neurone):
     def __init__(self, number_of_inputs_connections: int):
         super().__init__(number_of_inputs_connections)
 
-    def activate(self, x: float):
+    def _activate(self, x: float):
         return 1 / (1 + exp(-x))
 
 class ReLUNeurone(Neurone):
     def __init__(self, number_of_inputs_connections: int):
         super().__init__(number_of_inputs_connections)
 
-    def activate(self, value: float):
+    def _activate(self, value: float):
         return max(0, value)
 
 class TanHNeurone(Neurone):
     def __init__(self, number_of_inputs_connections: int):
         super().__init__(number_of_inputs_connections)
     
-    def activate(self, value: float):
+    def _activate(self, value: float):
         return tanh(value)

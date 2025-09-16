@@ -1,5 +1,7 @@
-from random import random
 from abc import ABC
+from .neurallayers import (
+    NeuralLayer, ReLUNeuralLayer, SigmoideNeuralLayer, TanHNeuralLayer, SigmoidNeurone, ReLUNeurone
+    )
 
 class NeuralNetwork(ABC):
     def __init__(self, layers_to_use: list[NeuralLayer]):
@@ -9,28 +11,27 @@ class NeuralNetwork(ABC):
     def layers(self) -> list[NeuralLayer]:
         return self.__layers
     
-    @staticmethod
-    def create_perceptron(
-            number_of_input_neurones: int,
-            number_of_hidden_neurones: int,
-            number_of_output_neurones: int
-            ):
-        
-        layers: list[NeuralLayer] = []
+    def predict(self, inputs: list[float]) -> list[float]:
+        for layer in self.layers:
+            inputs = layer.forward(inputs)
+        return inputs
 
-        # Input        
-        input_neurones: list[Neurone] = [Neurone(0)] * number_of_input_neurones
-        input_layer: NeuralLayer = NeuralLayer(input_neurones)
-        layers.append(input_layer)
+class Perceptron(NeuralNetwork):
+    def __init__(self, total_inputs_count: int):
 
-        # Hidden
-        hidden_neurones: list[Neurone] = [Neurone(len(input_neurones))] * number_of_hidden_neurones
-        hidden_layer: NeuralLayer = NeuralLayer(hidden_neurones)
-        layers.append(hidden_layer)
+        # Créer les neurones pour chaque couche
+        relu_neurones = []
+        for _ in range(total_inputs_count):
+            neurone = ReLUNeurone(0)
+            relu_neurones.append(neurone)
 
-        # Output
-        output_neurones: list[Neurone] = [Neurone(len(hidden_neurones))] * number_of_output_neurones
-        output_layer: NeuralLayer = NeuralLayer(output_neurones)
-        layers.append(output_layer)
+        sigmoid_neurones = [SigmoidNeurone(len(sigmoid_neurones))]
 
-        return NeuralNetwork(layers)
+        # Instancier les couches
+        input_layer: ReLUNeuralLayer = ReLUNeuralLayer(relu_neurones)
+        output_layer: SigmoideNeuralLayer = SigmoideNeuralLayer(sigmoid_neurones)
+
+        # Appeler le constructeur parent
+        layers: list[NeuralLayer] = [input_layer, output_layer]
+
+        super().__init__(layers)
