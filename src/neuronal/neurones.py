@@ -10,7 +10,6 @@ class Neurone(ABC):
         for index in range(len(self.__weights)):
             self.__weights[index] = uniform(-1, 1)
         self.__bias: float = uniform(-1, 1)
-        print(self.__bias)
 
     @abstractmethod
     def _activate(self, value: float) -> float:

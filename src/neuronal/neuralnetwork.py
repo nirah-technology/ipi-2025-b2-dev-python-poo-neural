@@ -25,7 +25,7 @@ class Perceptron(NeuralNetwork):
             neurone = ReLUNeurone(0)
             relu_neurones.append(neurone)
 
-        sigmoid_neurones = [SigmoidNeurone(len(sigmoid_neurones))]
+        sigmoid_neurones = [SigmoidNeurone(len(relu_neurones))]
 
         # Instancier les couches
         input_layer: ReLUNeuralLayer = ReLUNeuralLayer(relu_neurones)
